@@ -222,7 +222,7 @@ svg {
 
 .top {
   border-bottom: 1px solid var(--line);
-  z-index: 20;
+  z-index: 2500;
   background: #fff;
   align-items: center;
   gap: 16px;

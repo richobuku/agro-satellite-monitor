@@ -258,6 +258,16 @@ export default function App() {
           <span>Analytics & BI</span>
         </button>
 
+        <button
+          type="button"
+          className={`nv ${mainView === 'users' ? 'on' : ''}`}
+          onClick={() => setMainView('users')}
+          id="nav-users-btn"
+        >
+          <Users size={17} />
+          <span>Team & Users</span>
+        </button>
+
         <hr />
 
         <div className="nav-section-title">Telemetry & AI</div>
@@ -385,19 +395,24 @@ export default function App() {
               className="btn-o"
               onClick={() => setHamburgerOpen(!hamburgerOpen)}
               title="System Menu & Utilities"
+              id="top-hamburger-btn"
               style={{
                 height: '36px',
-                width: '36px',
-                padding: 0,
+                padding: '0 12px',
+                gap: '7px',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: hamburgerOpen ? 'var(--gt)' : '#fff',
                 borderColor: hamburgerOpen ? 'var(--g)' : 'var(--bd)',
-                color: hamburgerOpen ? 'var(--g)' : 'var(--ink)'
+                color: hamburgerOpen ? 'var(--g)' : 'var(--ink)',
+                fontWeight: 600,
+                fontSize: '13px',
+                cursor: 'pointer'
               }}
             >
               {hamburgerOpen ? <X size={17} /> : <Menu size={17} />}
+              <span>Menu</span>
             </button>
 
             {hamburgerOpen && (
@@ -409,7 +424,7 @@ export default function App() {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    zIndex: 998,
+                    zIndex: 2998,
                   }}
                   onClick={() => setHamburgerOpen(false)}
                 />
@@ -419,11 +434,11 @@ export default function App() {
                     position: 'absolute',
                     top: 'calc(100% + 8px)',
                     right: 0,
-                    width: '300px',
+                    width: '320px',
                     padding: '8px 0',
-                    zIndex: 999,
-                    boxShadow: '0 12px 32px rgba(0,0,0,0.12)',
-                    border: '1px solid var(--bd)',
+                    zIndex: 2999,
+                    boxShadow: '0 16px 40px rgba(0,0,0,0.18)',
+                    border: '1.5px solid var(--bd)',
                     background: '#fff',
                     borderRadius: '10px'
                   }}
