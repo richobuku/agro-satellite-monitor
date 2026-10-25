@@ -1,0 +1,82 @@
+[
+  {
+    "id": "usr_01",
+    "name": "Richard Obuku",
+    "email": "richard.obuku@agropulse.io",
+    "phone": "+256 772 001 234",
+    "role": "Super Admin",
+    "status": "active",
+    "district": "All Regions (Enterprise Admin)",
+    "assigned_gardens_count": 18,
+    "audits_completed": 42,
+    "last_active": "Just now",
+    "avatar": "RO",
+    "permissions": [
+      "manage_users",
+      "map_garden",
+      "approve_audits",
+      "view_telemetry",
+      "export_gis",
+      "manage_api_keys"
+    ],
+    "created_at": "2026-01-15T08:00:00.000Z"
+  },
+  {
+    "id": "usr_02",
+    "name": "Dr. Sarah Akello",
+    "email": "sarah.akello@agropulse.io",
+    "phone": "+256 782 554 112",
+    "role": "Chief Agronomist",
+    "status": "active",
+    "district": "Gulu & Lira Hubs",
+    "assigned_gardens_count": 12,
+    "audits_completed": 78,
+    "last_active": "14 mins ago",
+    "avatar": "SA",
+    "permissions": [
+      "map_garden",
+      "approve_audits",
+      "view_telemetry",
+      "export_gis"
+    ],
+    "created_at": "2026-02-01T09:30:00.000Z"
+  },
+  {
+    "id": "usr_03",
+    "name": "Jacob Odur",
+    "email": "jacob.odur@agropulse.io",
+    "phone": "+256 701 443 890",
+    "role": "Senior Field Auditor",
+    "status": "active",
+    "district": "Gulu District",
+    "assigned_gardens_count": 8,
+    "audits_completed": 114,
+    "last_active": "32 mins ago",
+    "avatar": "JO",
+    "permissions": [
+      "map_garden",
+      "approve_audits",
+      "view_telemetry"
+    ],
+    "created_at": "2026-02-15T10:15:00.000Z"
+  },
+  {
+    "id": "usr_04",
+    "name": "Jimmy Ouni",
+    "email": "jimmy.ouni@agropulse.io",
+    "phone": "+256 775 889 001",
+    "role": "Farm Enterprise Manager",
+    "status": "active",
+    "district": "Lira District",
+    "assigned_gardens_count": 6,
+    "audits_completed": 53,
+    "last_active": "2 hours ago",
+    "avatar": "JO",
+    "permissions": [
+      "view_telemetry",
+      "export_gis",
+      "map_garden"
+    ],
+    "created_at": "2026-03-01T11:00:00.000Z"
+  }
+]
