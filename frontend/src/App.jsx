@@ -13,6 +13,9 @@ import {
   HeartPulse,
   Users,
   TrendingUp,
+  Menu,
+  X,
+  Download,
 } from 'lucide-react';
 import FieldMap from './components/FieldMap';
 import SatelliteTimelapse from './components/SatelliteTimelapse';
@@ -56,9 +59,41 @@ export default function App() {
   const [newFieldModalOpen, setNewFieldModalOpen] = useState(false);
   const [calculatedHa, setCalculatedHa] = useState(0);
 
-  // Settings
+  // Settings & Utilities Menu
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [hasApiKey, setHasApiKey] = useState(false);
+  const [hamburgerOpen, setHamburgerOpen] = useState(false);
+
+  const handleExportAllGeoJson = () => {
+    const featureCollection = {
+      type: 'FeatureCollection',
+      name: 'AgroPulse_Fields_Fleet',
+      crs: { type: 'name', properties: { name: 'urn:ogc:def:crs:OGC:1.3:CRS84' } },
+      features: fields.map((f) => ({
+        type: 'Feature',
+        id: f.id,
+        properties: {
+          id: f.id,
+          name: f.name,
+          crop: f.crop || 'Unknown',
+          area_ha: f.area_ha || 0,
+          area_acres: f.area_acres || 0,
+          polyid: f.polyid || 'SIMULATED',
+        },
+        geometry: {
+          type: 'Polygon',
+          coordinates: [f.coordinates || []],
+        },
+      })),
+    };
+    const blob = new Blob([JSON.stringify(featureCollection, null, 2)], { type: 'application/geo+json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `agropulse-fields-fleet-${new Date().toISOString().split('T')[0]}.geojson`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   // Load initial fields and config
   const fetchAllFields = async () => {
@@ -223,26 +258,6 @@ export default function App() {
           <span>Analytics & BI</span>
         </button>
 
-        <button
-          type="button"
-          className={`nv ${mainView === 'users' ? 'on' : ''}`}
-          onClick={() => setMainView('users')}
-          id="nav-users-btn"
-        >
-          <Users size={17} />
-          <span>Team & Users</span>
-        </button>
-
-        <button
-          type="button"
-          className={`nv ${mainView === 'reviewer' ? 'on' : ''}`}
-          onClick={() => setMainView('reviewer')}
-          id="nav-reviewer-btn"
-        >
-          <ShieldCheck size={17} />
-          <span>Reviewer Portal</span>
-        </button>
-
         <hr />
 
         <div className="nav-section-title">Telemetry & AI</div>
@@ -296,29 +311,6 @@ export default function App() {
         </button>
 
         <div className="gap" />
-
-        <hr />
-
-        {/* Quick Map Action */}
-        <button
-          type="button"
-          className="nv"
-          onClick={handleStartDrawing}
-          style={{ color: drawingMode ? '#fbbf24' : undefined }}
-        >
-          <Compass size={17} style={{ color: drawingMode ? '#fbbf24' : undefined }} />
-          <span>{drawingMode ? 'Drawing Active' : 'Map Garden (GPS)'}</span>
-        </button>
-
-        {/* Settings Action */}
-        <button
-          type="button"
-          className="nv"
-          onClick={() => setSettingsOpen(true)}
-        >
-          <Settings size={17} style={{ color: hasApiKey ? 'var(--emerald-400)' : undefined }} />
-          <span>API & Config</span>
-        </button>
       </aside>
 
       {/* Main Content Area */}
@@ -386,19 +378,173 @@ export default function App() {
             </button>
           )}
 
-          {/* Settings icon */}
+          {/* Top Right: Team & Users Management Button */}
           <button
             type="button"
-            className="btn-o"
-            onClick={() => setSettingsOpen(true)}
-            style={{ padding: '6px 9px' }}
-            title="AgroMonitoring Configuration"
+            onClick={() => setMainView('users')}
+            title="Team & User Management"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '9px',
+              padding: '4px 12px 4px 5px',
+              background: mainView === 'users' ? 'var(--gt)' : '#fff',
+              border: `1.5px solid ${mainView === 'users' ? 'var(--g)' : 'var(--bd)'}`,
+              borderRadius: '24px',
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
           >
-            <Settings size={15} style={{ color: hasApiKey ? 'var(--g)' : 'var(--mute)' }} />
+            <div
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #143a2a, #15803d)',
+                color: '#fff',
+                fontSize: 11,
+                fontWeight: 700,
+                display: 'grid',
+                placeItems: 'center',
+                flexShrink: 0
+              }}
+            >
+              RO
+            </div>
+            <div style={{ textAlign: 'left', lineHeight: 1.15 }}>
+              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink)' }}>
+                Team & Users
+              </div>
+              <small style={{ fontSize: '10px', color: mainView === 'users' ? 'var(--g)' : 'var(--sub)', fontWeight: 600 }}>
+                6 Active
+              </small>
+            </div>
+            <Users size={14} style={{ color: mainView === 'users' ? 'var(--g)' : 'var(--muted)' }} />
           </button>
 
-          {/* User Avatar */}
-          <div className="av" title="AgroPulse Operations">AP</div>
+          {/* Top Right: Hamburger Menu for Secondary Tools */}
+          <div style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className="btn-o"
+              onClick={() => setHamburgerOpen(!hamburgerOpen)}
+              title="More System Utilities"
+              style={{
+                height: '36px',
+                width: '36px',
+                padding: 0,
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: hamburgerOpen ? 'var(--gt)' : '#fff',
+                borderColor: hamburgerOpen ? 'var(--g)' : 'var(--bd)',
+                color: hamburgerOpen ? 'var(--g)' : 'var(--ink)'
+              }}
+            >
+              {hamburgerOpen ? <X size={17} /> : <Menu size={17} />}
+            </button>
+
+            {hamburgerOpen && (
+              <>
+                <div
+                  style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 998,
+                  }}
+                  onClick={() => setHamburgerOpen(false)}
+                />
+                <div
+                  className="card"
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 8px)',
+                    right: 0,
+                    width: '300px',
+                    padding: '8px 0',
+                    zIndex: 999,
+                    boxShadow: '0 12px 32px rgba(0,0,0,0.12)',
+                    border: '1px solid var(--bd)',
+                    background: '#fff',
+                    borderRadius: '10px'
+                  }}
+                >
+                  <div style={{ padding: '8px 16px 6px', fontSize: '10px', fontWeight: 700, color: 'var(--sub)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                    Utilities & Ancillary Tools
+                  </div>
+
+                  <button
+                    type="button"
+                    className="menu-item"
+                    onClick={() => {
+                      setMainView('reviewer');
+                      setHamburgerOpen(false);
+                    }}
+                  >
+                    <ShieldCheck size={16} style={{ color: 'var(--g)' }} />
+                    <div style={{ textAlign: 'left' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink)' }}>Reviewer & Auditor Portal</div>
+                      <small style={{ fontSize: '11px', color: 'var(--sub)' }}>ESG & bank inspection dossiers</small>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="menu-item"
+                    onClick={() => {
+                      setSettingsOpen(true);
+                      setHamburgerOpen(false);
+                    }}
+                  >
+                    <Settings size={16} style={{ color: hasApiKey ? 'var(--g)' : 'var(--sub)' }} />
+                    <div style={{ textAlign: 'left' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink)' }}>AgroMonitoring API Config</div>
+                      <small style={{ fontSize: '11px', color: 'var(--sub)' }}>{hasApiKey ? 'Enterprise Key Active' : 'Configure API Key'}</small>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="menu-item"
+                    onClick={() => {
+                      setHamburgerOpen(false);
+                      handleStartDrawing();
+                    }}
+                  >
+                    <Compass size={16} style={{ color: drawingMode ? 'var(--amber)' : 'var(--blue)' }} />
+                    <div style={{ textAlign: 'left' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink)' }}>Map Garden (GPS / RTK)</div>
+                      <small style={{ fontSize: '11px', color: 'var(--sub)' }}>{drawingMode ? 'Drawing Points Active' : 'Draw polygon boundaries'}</small>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="menu-item"
+                    onClick={() => {
+                      setHamburgerOpen(false);
+                      handleExportAllGeoJson();
+                    }}
+                  >
+                    <Download size={16} style={{ color: 'var(--ink)' }} />
+                    <div style={{ textAlign: 'left' }}>
+                      <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink)' }}>Export Fleet GeoJSON</div>
+                      <small style={{ fontSize: '11px', color: 'var(--sub)' }}>Download all {fields.length} boundaries</small>
+                    </div>
+                  </button>
+
+                  <hr style={{ border: 0, borderTop: '1px solid var(--line)', margin: '6px 0' }} />
+
+                  <div style={{ padding: '8px 16px', fontSize: '11px', color: 'var(--muted)', lineHeight: 1.4 }}>
+                    <b>Constellation Status:</b> Sentinel-2A/2B • 4.8-day revisit cadence • 10m Multi-spectral.
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </header>
 
         {/* Content Body */}

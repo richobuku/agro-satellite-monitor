@@ -479,6 +479,23 @@ svg {
   font-size: 12.5px;
 }
 
+.menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s ease;
+}
+
+.menu-item:hover {
+  background: var(--soft);
+}
+
 /* Tags and Badges */
 .tag {
   color: var(--mute);
