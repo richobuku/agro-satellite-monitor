@@ -5,6 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "postinstall": "npm install --prefix frontend",
     "start": "node backend/server.js",
     "build": "npm run build --prefix frontend",
     "dev:backend": "node --watch backend/server.js",
