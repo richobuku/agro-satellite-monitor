@@ -378,57 +378,13 @@ export default function App() {
             </button>
           )}
 
-          {/* Top Right: Team & Users Management Button */}
-          <button
-            type="button"
-            onClick={() => setMainView('users')}
-            title="Team & User Management"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '9px',
-              padding: '4px 12px 4px 5px',
-              background: mainView === 'users' ? 'var(--gt)' : '#fff',
-              border: `1.5px solid ${mainView === 'users' ? 'var(--g)' : 'var(--bd)'}`,
-              borderRadius: '24px',
-              cursor: 'pointer',
-              transition: 'all 0.15s ease',
-            }}
-          >
-            <div
-              style={{
-                width: 28,
-                height: 28,
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #143a2a, #15803d)',
-                color: '#fff',
-                fontSize: 11,
-                fontWeight: 700,
-                display: 'grid',
-                placeItems: 'center',
-                flexShrink: 0
-              }}
-            >
-              RO
-            </div>
-            <div style={{ textAlign: 'left', lineHeight: 1.15 }}>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--ink)' }}>
-                Team & Users
-              </div>
-              <small style={{ fontSize: '10px', color: mainView === 'users' ? 'var(--g)' : 'var(--sub)', fontWeight: 600 }}>
-                6 Active
-              </small>
-            </div>
-            <Users size={14} style={{ color: mainView === 'users' ? 'var(--g)' : 'var(--muted)' }} />
-          </button>
-
-          {/* Top Right: Hamburger Menu for Secondary Tools */}
+          {/* Top Right: Hamburger Menu for Secondary Tools & User Management */}
           <div style={{ position: 'relative' }}>
             <button
               type="button"
               className="btn-o"
               onClick={() => setHamburgerOpen(!hamburgerOpen)}
-              title="More System Utilities"
+              title="System Menu & Utilities"
               style={{
                 height: '36px',
                 width: '36px',
@@ -472,6 +428,51 @@ export default function App() {
                     borderRadius: '10px'
                   }}
                 >
+                  <div style={{ padding: '8px 16px 6px', fontSize: '10px', fontWeight: 700, color: 'var(--sub)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                    Team & Organization
+                  </div>
+
+                  {/* Team & Users Management */}
+                  <button
+                    type="button"
+                    className="menu-item"
+                    onClick={() => {
+                      setMainView('users');
+                      setHamburgerOpen(false);
+                    }}
+                    style={{
+                      background: mainView === 'users' ? 'var(--gt)' : 'transparent',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: '50%',
+                        background: 'linear-gradient(135deg, #143a2a, #15803d)',
+                        color: '#fff',
+                        fontSize: 11,
+                        fontWeight: 700,
+                        display: 'grid',
+                        placeItems: 'center',
+                        flexShrink: 0
+                      }}
+                    >
+                      RO
+                    </div>
+                    <div style={{ textAlign: 'left', flex: 1 }}>
+                      <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span>Team & Users</span>
+                        <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--g)', background: 'var(--gt)', padding: '1px 7px', borderRadius: '12px' }}>
+                          6 Active
+                        </span>
+                      </div>
+                      <small style={{ fontSize: '11px', color: 'var(--sub)' }}>Role-based auditor permissions & RBAC</small>
+                    </div>
+                  </button>
+
+                  <hr style={{ border: 0, borderTop: '1px solid var(--line)', margin: '6px 0' }} />
+
                   <div style={{ padding: '8px 16px 6px', fontSize: '10px', fontWeight: 700, color: 'var(--sub)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
                     Utilities & Ancillary Tools
                   </div>
