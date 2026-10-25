@@ -28,6 +28,7 @@ export default function NewFieldModal({
   const [plantingDate, setPlantingDate] = useState(new Date().toISOString().split('T')[0]);
   const [notes, setNotes] = useState('');
   const [saving, setSaving] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   if (!isOpen) return null;
 
@@ -35,6 +36,7 @@ export default function NewFieldModal({
     e.preventDefault();
     if (!name.trim()) return;
 
+    setErrorMsg('');
     setSaving(true);
     try {
       await onSaveField({
@@ -47,9 +49,10 @@ export default function NewFieldModal({
       });
       setName('');
       setNotes('');
+      setErrorMsg('');
       onClose();
     } catch (err) {
-      alert('Error saving field: ' + err.message);
+      setErrorMsg(err.message || 'Unable to register garden. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -124,6 +127,22 @@ export default function NewFieldModal({
               {calculatedHa} Ha ({calculatedAcres} Acres)
             </span>
           </div>
+
+          {errorMsg && (
+            <div
+              style={{
+                background: '#fef2f2',
+                border: '1px solid #fca5a5',
+                borderRadius: 'var(--radius-sm)',
+                padding: '10px 14px',
+                color: '#b91c1c',
+                fontSize: '0.82rem',
+                lineHeight: 1.4,
+              }}
+            >
+              {errorMsg}
+            </div>
+          )}
 
           <div>
             <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: 6 }}>

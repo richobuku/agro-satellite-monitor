@@ -13,9 +13,13 @@ const PORT = process.env.PORT || 5050;
 app.use(cors());
 app.use(express.json());
 
-// Persistent local storage path for fields
-const DATA_FILE = path.join(__dirname, 'fields_data.json');
-const CONFIG_FILE = path.join(__dirname, 'config.json');
+// Persistent local storage path for fields (using /tmp on Vercel serverless)
+const DATA_FILE = process.env.VERCEL
+  ? path.join('/tmp', 'fields_data.json')
+  : path.join(__dirname, 'fields_data.json');
+const CONFIG_FILE = process.env.VERCEL
+  ? path.join('/tmp', 'config.json')
+  : path.join(__dirname, 'config.json');
 
 // Initialize config & fields storage
 function loadConfig() {
@@ -464,8 +468,10 @@ app.get('/api/soil', async (req, res) => {
   });
 });
 
-// Persistent local storage path for users
-const USERS_FILE = path.join(__dirname, 'users_data.json');
+// Persistent local storage path for users (using /tmp on Vercel serverless)
+const USERS_FILE = process.env.VERCEL
+  ? path.join('/tmp', 'users_data.json')
+  : path.join(__dirname, 'users_data.json');
 
 function loadUsers() {
   try {
@@ -732,6 +738,10 @@ app.get('/api/analytics/user-activity', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`🌾 AgroPulse Satellite Monitor Backend running on http://localhost:${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🌾 AgroPulse Satellite Monitor Backend running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
